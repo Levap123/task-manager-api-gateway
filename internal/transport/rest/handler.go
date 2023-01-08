@@ -1,18 +1,21 @@
 package rest
 
 import (
+	"github.com/Levap123/task-manager-api-gateway/internal/client/rpc"
 	utils "github.com/Levap123/task-manager-api-gateway/pkg"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Rest struct {
-	logger *utils.Logger
+	logger    *utils.Logger
+	rpcClient *rpc.Client
 }
 
-func NewRest(logger *utils.Logger) *Rest {
+func NewRest(logger *utils.Logger, client *rpc.Client) *Rest {
 	return &Rest{
-		logger: logger,
+		logger:    logger,
+		rpcClient: client,
 	}
 }
 func (r *Rest) InitRoutes() *gin.Engine {

@@ -1,6 +1,9 @@
 package rest
 
 import (
+	"context"
+
+	"github.com/Levap123/task-manager-api-gateway/proto"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,5 +22,10 @@ func (r *Rest) signUp(c *gin.Context) {
 	if err := r.readJSON(c, &input); err != nil {
 		return
 	}
-
+	user := &proto.User{
+		Name:     input.Username,
+		Email:    input.Email,
+		Password: input.Password,
+	}
+	r.rpcClient.Auth.SignUp(context.Background(), user)
 }
