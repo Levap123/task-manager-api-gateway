@@ -26,7 +26,7 @@ func init() {
 
 func NewConfigs() *Configs {
 	return &Configs{
-		AUTH_ADDRESS: os.Getenv("AUTH_ADDRESS"),
+		AUTH_ADDRESS:   os.Getenv("AUTH_ADDRESS"),
 		SERVER_ADDRESS: os.Getenv("SERVER_ADDRESS"),
 		// DB_USER_NAME: os.Getenv("DB_USER_NAME"),
 		// DB_PASSWORD: os.Getenv("DB_")

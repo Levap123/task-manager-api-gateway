@@ -2,6 +2,7 @@ package rest
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/Levap123/task-manager-api-gateway/proto"
 	"github.com/gin-gonic/gin"
@@ -27,5 +28,10 @@ func (r *Rest) signUp(c *gin.Context) {
 		Email:    input.Email,
 		Password: input.Password,
 	}
-	r.rpcClient.Auth.SignUp(context.Background(), user)
+	resp, err := r.rpcClient.Auth.SignUp(context.Background(), user)
+	if err != nil {
+		r.sendErrorJSON(c, http.StatusBadRequest, err)
+		return
+	}
+	r.sendJSON(c, resp)
 }

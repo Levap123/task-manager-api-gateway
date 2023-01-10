@@ -43,7 +43,7 @@ func main() {
 	rest := rest.NewRest(logger, client)
 
 	go func() {
-		if err := server.Run(":8080", rest.InitRoutes()); err != nil {
+		if err := server.Run(cfg.SERVER_ADDRESS, rest.InitRoutes()); err != nil {
 			logrus.Fatalln(err)
 		}
 	}()
