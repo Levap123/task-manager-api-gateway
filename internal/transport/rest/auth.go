@@ -53,3 +53,7 @@ func (r *Rest) signIn(c *gin.Context) {
 	}
 	r.sendJSON(c, resp)
 }
+
+func (r *Rest) refresh(c *gin.Context){
+	
+}
