@@ -15,6 +15,7 @@ func (r *Rest) userIdentity(c *gin.Context) {
 	authParts := strings.Split(auth, "Bearer ")
 	if len(authParts) != 2 {
 		r.sendErrorJSON(c, http.StatusUnauthorized, errors.New("invalid auth token"))
+		c.Abort()
 		return
 	}
 	request := &proto.Access{
@@ -23,7 +24,11 @@ func (r *Rest) userIdentity(c *gin.Context) {
 	userId, err := r.rpcClient.Auth.Validate(context.TODO(), request)
 	if err != nil {
 		r.sendErrorJSON(c, http.StatusUnauthorized, errors.New("invalid auth token"))
+		c.Abort()
 		return
 	}
+
 	c.Set("userId", userId.Id)
+	c.Set("access", authParts[1])
+	c.Next()
 }

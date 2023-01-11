@@ -2,6 +2,8 @@ package rest
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/Levap123/task-manager-api-gateway/proto"
@@ -54,6 +56,27 @@ func (r *Rest) signIn(c *gin.Context) {
 	r.sendJSON(c, resp)
 }
 
-func (r *Rest) refresh(c *gin.Context){
-	
+type refreshBody struct {
+	RefreshToken string `json:"refresh_token,omitempty"`
+}
+
+func (r *Rest) refresh(c *gin.Context) {
+	errTokenExpired := errors.New("token expired")
+	var input refreshBody
+	fmt.Println(input.RefreshToken)
+	r.readJSON(c, &input)
+	request := &proto.Tokens{
+		Acces:   c.Value("access").(string),
+		Refresh: input.RefreshToken,
+	}
+	tokenPair, err := r.rpcClient.Auth.Refresh(context.TODO(), request)
+	if err != nil {
+		if err == errTokenExpired {
+			r.sendErrorJSON(c, http.StatusUnauthorized, fmt.Errorf("refresh token expired lol"))
+			return
+		}
+		r.sendErrorJSON(c, http.StatusInternalServerError, fmt.Errorf("invalid refresh token"))
+		return
+	}
+	r.sendJSON(c, tokenPair)
 }
