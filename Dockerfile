@@ -18,5 +18,5 @@ COPY --from=build /app/.env .
 
 USER root:root
 
-EXPOSE 5050
+EXPOSE 8080
 ENTRYPOINT ["./main"]
