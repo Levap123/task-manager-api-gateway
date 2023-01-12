@@ -24,10 +24,7 @@ func (r *Rest) InitRoutes() *gin.Engine {
 	{
 		auth.POST("/sign-in", r.signIn)
 		auth.POST("/sign-up", r.signUp)
-		refresh := auth.Group("refresh", r.userIdentity)
-		{
-			refresh.POST("", r.refresh)
-		}
+		auth.POST("/refresh", r.refresh)
 
 	}
 	// api := router.Group("/api/v1", r.userIdentity)
