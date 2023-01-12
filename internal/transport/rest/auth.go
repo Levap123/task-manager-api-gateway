@@ -16,6 +16,16 @@ type signUpBody struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// @Summary sign up
+// @Tags auth
+// @Description register
+// @ID register
+// @Accept  json
+// @Produce  json
+// @Param input body signUpBody true "credentials"
+// @Success 200 {object} proto.User
+// @Failure default {object} errorResponse
+// @Router /auth/sign-up [post]
 func (r *Rest) signUp(c *gin.Context) {
 	var input signUpBody
 	if err := r.readJSON(c, &input); err != nil {
@@ -39,6 +49,16 @@ type signInBody struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// @Summary sign in
+// @Tags auth
+// @Description login
+// @ID login
+// @Accept  json
+// @Produce  json
+// @Param input body signInBody true "credentials"
+// @Success 200 {object} proto.SignInResponse
+// @Failure default {object} errorResponse
+// @Router /auth/sign-in [post]
 func (r *Rest) signIn(c *gin.Context) {
 	var input signInBody
 	if err := r.readJSON(c, &input); err != nil {
@@ -57,14 +77,27 @@ func (r *Rest) signIn(c *gin.Context) {
 }
 
 type refreshBody struct {
-	RefreshToken string `json:"refresh_token,omitempty"`
+	RefreshToken string `json:"refresh_token,omitempty" binding:"required"`
 }
 
+// @Summary refresh
+// @Tags auth
+// @Description refresh access token using refresh token
+// @ID refresh
+// @Accept  json
+// @Produce  json
+// @Param input body refreshBody true "credentials"
+// @Param Authorization header string true "With the bearer started" default(Bearer <Add access token here>)
+// @Success 200 {object} refreshBody
+// @Failure default {object} errorResponse
+// @Router /auth/refresh [post]
 func (r *Rest) refresh(c *gin.Context) {
 	errTokenExpired := errors.New("token expired")
 	var input refreshBody
 	fmt.Println(input.RefreshToken)
-	r.readJSON(c, &input)
+	if err := r.readJSON(c, &input); err != nil {
+		return
+	}
 	request := &proto.Tokens{
 		Acces:   c.Value("access").(string),
 		Refresh: input.RefreshToken,

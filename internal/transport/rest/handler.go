@@ -1,10 +1,12 @@
 package rest
 
 import (
+	_ "github.com/Levap123/task-manager-api-gateway/docs"
 	"github.com/Levap123/task-manager-api-gateway/internal/client/rpc"
 	utils "github.com/Levap123/task-manager-api-gateway/pkg"
-
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Rest struct {
@@ -19,17 +21,20 @@ func NewRest(logger *utils.Logger, client *rpc.Client) *Rest {
 	}
 }
 func (r *Rest) InitRoutes() *gin.Engine {
-	router := gin.Default()
+	router := gin.New()
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-in", r.signIn)
 		auth.POST("/sign-up", r.signUp)
-		auth.POST("/refresh", r.refresh)
+		auth.POST("/refresh", r.userIdentity, r.refresh)
 
 	}
 	// api := router.Group("/api/v1", r.userIdentity)
 	{
 
 	}
+
 	return router
 }

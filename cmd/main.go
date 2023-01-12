@@ -6,6 +6,7 @@ import (
 	"syscall"
 
 	"github.com/Levap123/task-manager-api-gateway/config"
+	_ "github.com/Levap123/task-manager-api-gateway/docs"
 	"github.com/Levap123/task-manager-api-gateway/internal/client/rpc"
 	"github.com/Levap123/task-manager-api-gateway/internal/transport/rest"
 	utils "github.com/Levap123/task-manager-api-gateway/pkg"
@@ -16,9 +17,20 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
-// @title task-manager API documentation
-// @version 1.0.0// @host localhost:8080
-// @BasePath /
+// @title           API gateway for microservice application
+// @version         1.0
+// @description     API gateway for microservice task-manager app, GRPC, protobuf
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   Levap Mik
+// @contact.url    https://t.me/kavelpim123
+// @contact.email  pavlikkim200401@gmail.com
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /
 func main() {
 	cfg := config.NewConfigs()
 
