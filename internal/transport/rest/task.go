@@ -16,7 +16,9 @@ type TaskBody struct {
 func (r *Rest) Create(c *gin.Context) {
 	userID := c.Value("userId")
 	var input TaskBody
-	r.readJSON(c, &input)
+	if err := r.readJSON(c, &input); err != nil {
+		return
+	}
 	in := &proto.Task{
 		Title:  input.Title,
 		Body:   input.Body,
@@ -26,6 +28,7 @@ func (r *Rest) Create(c *gin.Context) {
 	fmt.Print(resp, 123)
 	if err != nil {
 		r.sendErrorJSON(c, http.StatusBadRequest, err)
+		return
 	}
 	r.sendJSON(c, resp)
 }
