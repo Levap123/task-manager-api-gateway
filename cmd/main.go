@@ -42,15 +42,18 @@ func main() {
 		grpc.WithInsecure(),
 	}
 	connAuth, err := grpc.Dial(cfg.AUTH_ADDRESS, opts...)
+	connTasks, err := grpc.Dial(cfg.TASKS_ADDRESS, opts...)
 	if err != nil {
 		grpclog.Fatalf("failt to dial: %v\n", err)
 	}
 
 	defer connAuth.Close()
+	defer connTasks.Close()
 
 	clientAuth := proto.NewAuthClient(connAuth)
+	clientTasks := proto.NewTaskManagerClient(connTasks)
 
-	client := rpc.NewClient(clientAuth)
+	client := rpc.NewClient(clientAuth, clientTasks)
 
 	rest := rest.NewRest(logger, client)
 

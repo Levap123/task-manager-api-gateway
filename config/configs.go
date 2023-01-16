@@ -9,7 +9,7 @@ import (
 type Configs struct {
 	AUTH_ADDRESS   string
 	SERVER_ADDRESS string
-
+	TASKS_ADDRESS  string
 	// DB_USER_NAME string
 	// DB_PASSWORD  string
 	// DB_SSLMODE   string
@@ -28,6 +28,7 @@ func NewConfigs() *Configs {
 	return &Configs{
 		AUTH_ADDRESS:   os.Getenv("AUTH_ADDRESS"),
 		SERVER_ADDRESS: os.Getenv("SERVER_ADDRESS"),
+		TASKS_ADDRESS:  os.Getenv("TASKS_ADDRESS"),
 		// DB_USER_NAME: os.Getenv("DB_USER_NAME"),
 		// DB_PASSWORD: os.Getenv("DB_")
 		// DB_SSLMODE

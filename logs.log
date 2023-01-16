@@ -165,3 +165,8 @@ time="2023-01-12T18:31:27+06:00" level=error msg="rpc error: code = Unavailable 
 time="2023-01-12T18:52:16+06:00" level=error msg="invalid refresh token"
 time="2023-01-12T18:52:17+06:00" level=error msg="invalid refresh token"
 time="2023-01-12T21:25:03+06:00" level=error msg="rpc error: code = Unknown desc = ERROR: duplicate key value violates unique constraint \"users_email_key\" (SQLSTATE 23505)"
+time="2023-01-16T13:25:23+06:00" level=error msg="invalid auth token"
+time="2023-01-16T13:25:39+06:00" level=error msg="incorrect input body"
+time="2023-01-16T13:26:27+06:00" level=error msg="incorrect input body"
+time="2023-01-16T13:26:27+06:00" level=error msg="incorrect input body"
+time="2023-01-16T13:26:28+06:00" level=error msg="incorrect input body"

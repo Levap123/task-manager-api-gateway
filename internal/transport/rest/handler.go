@@ -31,9 +31,12 @@ func (r *Rest) InitRoutes() *gin.Engine {
 		auth.POST("/refresh", r.userIdentity, r.refresh)
 
 	}
-	// api := router.Group("/api/v1", r.userIdentity)
+	api := router.Group("/api/v1", r.userIdentity)
 	{
-
+		tasks := api.Group("/tasks")
+		{
+			tasks.POST("", r.Create)
+		}
 	}
 
 	return router

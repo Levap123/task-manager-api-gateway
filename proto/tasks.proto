@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./;proto";
+
+service TaskManager {
+  rpc Create(Task) returns (TaskHelperBody);
+  rpc Update (Task) returns (TaskHelperBody);
+  rpc GetAll (UserRequest) returns (TaskArray);
+  rpc Get (UserAndTask) returns (Task);
+  rpc Delete (TaskHelperBody) returns (TaskHelperBody);
+}
+
+message TaskHelperBody {
+  bytes id = 1;
+}
+
+message UserRequest {
+  int64 id = 1;
+}
+
+message  UserAndTask {
+  int64 user_id =1;
+  bytes task_id = 2;
+}
+message Task {
+  string title = 1;
+  string body = 2;
+  int64  user_id = 3;
+}
+ message TaskArray {
+  repeated Task tasks = 1;
+ }
