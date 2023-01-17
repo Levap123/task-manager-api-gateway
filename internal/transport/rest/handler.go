@@ -36,6 +36,7 @@ func (r *Rest) InitRoutes() *gin.Engine {
 		tasks := api.Group("/tasks")
 		{
 			tasks.POST("", r.Create)
+			tasks.GET("", r.GetUserById)
 		}
 	}
 

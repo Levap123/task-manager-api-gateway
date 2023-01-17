@@ -32,3 +32,17 @@ func (r *Rest) Create(c *gin.Context) {
 	}
 	r.sendJSON(c, resp)
 }
+
+func (r *Rest) GetUserById(c *gin.Context) {
+	userID := c.Value("userId")
+	in := &proto.UserRequest{
+		Id: int64(userID.(uint64)),
+	}
+	resp, err := r.rpcClient.Tasks.GetAll(context.TODO(), in)
+	if err != nil {
+		r.sendErrorJSON(c, http.StatusBadRequest, err)
+		return
+	}
+	r.sendJSON(c, resp)
+
+}
