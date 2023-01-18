@@ -33,7 +33,7 @@ func (r *Rest) Create(c *gin.Context) {
 	r.sendJSON(c, resp)
 }
 
-func (r *Rest) GetUserById(c *gin.Context) {
+func (r *Rest) GetTasksByUserId(c *gin.Context) {
 	userID := c.Value("userId")
 	in := &proto.UserRequest{
 		Id: int64(userID.(uint64)),
@@ -45,4 +45,19 @@ func (r *Rest) GetUserById(c *gin.Context) {
 	}
 	r.sendJSON(c, resp)
 
+}
+func (r *Rest) GetTaskByTaskId(c *gin.Context) {
+	taskID := c.Param("taskId")
+	userID := c.Value("userId")
+	fmt.Println(taskID)
+	in := &proto.UserAndTask{
+		UserId: int64(userID.(uint64)),
+		TaskId: taskID,
+	}
+	resp, err := r.rpcClient.Tasks.Get(context.TODO(), in)
+	if err != nil {
+		r.sendErrorJSON(c, http.StatusBadRequest, err)
+		return
+	}
+	r.sendJSON(c, resp)
 }
