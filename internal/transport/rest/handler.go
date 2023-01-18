@@ -38,6 +38,7 @@ func (r *Rest) InitRoutes() *gin.Engine {
 			tasks.POST("", r.Create)
 			tasks.GET("", r.GetTasksByUserId)
 			tasks.GET(":taskId", r.GetTaskByTaskId)
+			tasks.PUT(":taskId", r.UpdateTask)
 		}
 	}
 

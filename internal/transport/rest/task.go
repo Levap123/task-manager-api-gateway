@@ -61,3 +61,24 @@ func (r *Rest) GetTaskByTaskId(c *gin.Context) {
 	}
 	r.sendJSON(c, resp)
 }
+
+func (r *Rest) UpdateTask(c *gin.Context) {
+	userID := c.Value("userId")
+	var input TaskBody
+	if err := r.readJSON(c, &input); err != nil {
+		return
+	}
+	taskID := c.Param("taskId")
+	in := &proto.Task{
+		Id:     taskID,
+		Title:  input.Title,
+		Body:   input.Body,
+		UserId: int64(userID.(uint64)),
+	}
+	resp, err := r.rpcClient.Tasks.Update(context.TODO(), in)
+	if err != nil {
+		r.sendErrorJSON(c, http.StatusBadRequest, err)
+		return
+	}
+	r.sendJSON(c, resp)
+}
