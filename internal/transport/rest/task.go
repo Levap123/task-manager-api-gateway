@@ -82,3 +82,19 @@ func (r *Rest) UpdateTask(c *gin.Context) {
 	}
 	r.sendJSON(c, resp)
 }
+
+func (r *Rest) DeleteTask(c *gin.Context) {
+	taskID := c.Param("taskId")
+	userID := c.Value("userId")
+	in := &proto.UserAndTask{
+		UserId: int64(userID.(uint64)),
+		TaskId: taskID,
+	}
+
+	resp, err := r.rpcClient.Tasks.Delete(context.TODO(), in)
+	if err != nil {
+		r.sendErrorJSON(c, http.StatusBadRequest, err)
+		return
+	}
+	r.sendJSON(c, resp)
+}

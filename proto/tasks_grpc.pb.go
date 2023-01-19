@@ -26,7 +26,7 @@ type TaskManagerClient interface {
 	Update(ctx context.Context, in *Task, opts ...grpc.CallOption) (*TaskHelperBody, error)
 	GetAll(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*TaskArray, error)
 	Get(ctx context.Context, in *UserAndTask, opts ...grpc.CallOption) (*Task, error)
-	Delete(ctx context.Context, in *TaskHelperBody, opts ...grpc.CallOption) (*TaskHelperBody, error)
+	Delete(ctx context.Context, in *UserAndTask, opts ...grpc.CallOption) (*TaskHelperBody, error)
 }
 
 type taskManagerClient struct {
@@ -73,7 +73,7 @@ func (c *taskManagerClient) Get(ctx context.Context, in *UserAndTask, opts ...gr
 	return out, nil
 }
 
-func (c *taskManagerClient) Delete(ctx context.Context, in *TaskHelperBody, opts ...grpc.CallOption) (*TaskHelperBody, error) {
+func (c *taskManagerClient) Delete(ctx context.Context, in *UserAndTask, opts ...grpc.CallOption) (*TaskHelperBody, error) {
 	out := new(TaskHelperBody)
 	err := c.cc.Invoke(ctx, "/proto.TaskManager/Delete", in, out, opts...)
 	if err != nil {
@@ -90,7 +90,7 @@ type TaskManagerServer interface {
 	Update(context.Context, *Task) (*TaskHelperBody, error)
 	GetAll(context.Context, *UserRequest) (*TaskArray, error)
 	Get(context.Context, *UserAndTask) (*Task, error)
-	Delete(context.Context, *TaskHelperBody) (*TaskHelperBody, error)
+	Delete(context.Context, *UserAndTask) (*TaskHelperBody, error)
 	mustEmbedUnimplementedTaskManagerServer()
 }
 
@@ -110,7 +110,7 @@ func (UnimplementedTaskManagerServer) GetAll(context.Context, *UserRequest) (*Ta
 func (UnimplementedTaskManagerServer) Get(context.Context, *UserAndTask) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedTaskManagerServer) Delete(context.Context, *TaskHelperBody) (*TaskHelperBody, error) {
+func (UnimplementedTaskManagerServer) Delete(context.Context, *UserAndTask) (*TaskHelperBody, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedTaskManagerServer) mustEmbedUnimplementedTaskManagerServer() {}
@@ -199,7 +199,7 @@ func _TaskManager_Get_Handler(srv interface{}, ctx context.Context, dec func(int
 }
 
 func _TaskManager_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TaskHelperBody)
+	in := new(UserAndTask)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -211,7 +211,7 @@ func _TaskManager_Delete_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/proto.TaskManager/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskManagerServer).Delete(ctx, req.(*TaskHelperBody))
+		return srv.(TaskManagerServer).Delete(ctx, req.(*UserAndTask))
 	}
 	return interceptor(ctx, in, info, handler)
 }
