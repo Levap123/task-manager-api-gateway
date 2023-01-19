@@ -8,14 +8,25 @@ import (
 	"net/http"
 )
 
-type TaskBody struct {
+type taskBody struct {
 	Title string `json:"title,omitempty" binding:"required"`
 	Body  string `json:"body,omitempty" binding:"required"`
 }
 
+// @Summary create task
+// @Tags task
+// @Description create task and assign it to user
+// @ID create_task
+// @Accept  json
+// @Produce  json
+// @Param input body taskBody true "task title and body"
+// @Param Authorization header string true "With the bearer started" default(Bearer <Add access token here>)
+// @Success 200 {object} proto.TaskHelperBody
+// @Failure default {object} errorResponse
+// @Router /api/v1/tasks [post]
 func (r *Rest) Create(c *gin.Context) {
 	userID := c.Value("userId")
-	var input TaskBody
+	var input taskBody
 	if err := r.readJSON(c, &input); err != nil {
 		return
 	}
@@ -33,6 +44,16 @@ func (r *Rest) Create(c *gin.Context) {
 	r.sendJSON(c, resp)
 }
 
+// @Summary get tasks by user id
+// @Tags task
+// @Description get all tasks that assign to user by him id
+// @ID getall_task
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "With the bearer started" default(Bearer <Add access token here>)
+// @Success 200 {array} proto.Task
+// @Failure default {object} errorResponse
+// @Router /api/v1/tasks [get]
 func (r *Rest) GetTasksByUserId(c *gin.Context) {
 	userID := c.Value("userId")
 	in := &proto.UserRequest{
@@ -46,6 +67,18 @@ func (r *Rest) GetTasksByUserId(c *gin.Context) {
 	r.sendJSON(c, resp)
 
 }
+
+// @Summary get task by id
+// @Tags task
+// @Description get one task by user id and task id
+// @ID get_task
+// @Accept  json
+// @Produce  json
+// @Param id path string true " ID"
+// @Param Authorization header string true "With the bearer started" default(Bearer <Add access token here>)
+// @Success 200 {object} proto.Task
+// @Failure default {object} errorResponse
+// @Router /api/v1/tasks/{id} [get]
 func (r *Rest) GetTaskByTaskId(c *gin.Context) {
 	taskID := c.Param("taskId")
 	userID := c.Value("userId")
@@ -64,7 +97,7 @@ func (r *Rest) GetTaskByTaskId(c *gin.Context) {
 
 func (r *Rest) UpdateTask(c *gin.Context) {
 	userID := c.Value("userId")
-	var input TaskBody
+	var input taskBody
 	if err := r.readJSON(c, &input); err != nil {
 		return
 	}
@@ -83,6 +116,17 @@ func (r *Rest) UpdateTask(c *gin.Context) {
 	r.sendJSON(c, resp)
 }
 
+// @Summary delete task by id
+// @Tags task
+// @Description delete one task by user id and task id
+// @ID delete_task
+// @Accept  json
+// @Produce  json
+// @Param id path string true " ID"
+// @Param Authorization header string true "With the bearer started" default(Bearer <Add access token here>)
+// @Success 200 {object} proto.TaskHelperBody
+// @Failure default {object} errorResponse
+// @Router /api/v1/tasks/{id} [delete]
 func (r *Rest) DeleteTask(c *gin.Context) {
 	taskID := c.Param("taskId")
 	userID := c.Value("userId")

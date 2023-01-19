@@ -7,6 +7,22 @@ definitions:
       refresh_token:
         type: string
     type: object
+  proto.Task:
+    properties:
+      body:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  proto.TaskHelperBody:
+    properties:
+      id:
+        type: string
+    type: object
   proto.User:
     properties:
       email:
@@ -55,6 +71,16 @@ definitions:
     - password
     - username
     type: object
+  rest.taskBody:
+    properties:
+      body:
+        type: string
+      title:
+        type: string
+    required:
+    - body
+    - title
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -69,6 +95,130 @@ info:
   title: API gateway for microservice application
   version: "1.0"
 paths:
+  /api/v1/tasks:
+    get:
+      consumes:
+      - application/json
+      description: get all tasks that assign to user by him id
+      operationId: getall_task
+      parameters:
+      - default: Bearer <Add access token here>
+        description: With the bearer started
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/proto.Task'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: get tasks by user id
+      tags:
+      - task
+    post:
+      consumes:
+      - application/json
+      description: create task and assign it to user
+      operationId: create_task
+      parameters:
+      - description: task title and body
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/rest.taskBody'
+      - default: Bearer <Add access token here>
+        description: With the bearer started
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/proto.TaskHelperBody'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: create task
+      tags:
+      - task
+  /api/v1/tasks/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete one task by user id and task id
+      operationId: delete_task
+      parameters:
+      - description: ' ID'
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer <Add access token here>
+        description: With the bearer started
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/proto.TaskHelperBody'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: delete task by id
+      tags:
+      - task
+    get:
+      consumes:
+      - application/json
+      description: get one task by user id and task id
+      operationId: get_task
+      parameters:
+      - description: ' ID'
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer <Add access token here>
+        description: With the bearer started
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/proto.Task'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: get task by id
+      tags:
+      - task
   /auth/refresh:
     post:
       consumes:
